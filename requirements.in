@@ -1,0 +1,49 @@
+# Actual imports: Required packages for the application runtime
+# These packages are necessary for the core functionality of your application
+
+# Streamlit: An open-source app framework for Machine Learning and Data Science projects
+streamlit==1.31.0
+
+# Watchdog: Filesystem events monitoring
+watchdog==3.0.0
+
+# Pandas: Data manipulation and analysis
+pandas
+
+# matplotlib: Creating nice plots data
+matplotlib
+
+# pydantic: Data validation using Python type hints.
+pydantic==2.6.0
+
+# plotly: An open-source, interactive data visualization library for Python
+plotly==5.18.0
+
+# numpy: data calculations fast 
+numpy
+
+# geopy is a Python client for several popular geocoding web services.
+geopy
+
+
+
+# Development tools: Packages used for development, testing, and code quality
+# These are not required for the application to run but are used during development for better code quality, debugging, and visualization
+
+# Ruff: An extremely fast Python linter
+ruff
+
+# Pyright: Static type checker for Python
+pyright
+
+# Plotly: Interactive graphing library for Python
+plotly
+
+# deadcode: package to view for unused functions
+deadcode
+
+# Icecream: A tool for debugging, making print debugging easier
+icecream
+
+# pip-tools: A set of tools to keep your pinned Python dependencies fresh.
+pip-tools
