@@ -4,6 +4,8 @@ import re
 import pprint
 import pandas as pd
 import streamlit as st
+import base64
+from pathlib import Path
 from geopy.geocoders import Nominatim
 from geopy.distance import great_circle
 from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
@@ -205,3 +207,13 @@ except NameError:
     pass
 
 st.divider()
+left_co, cent_co,last_co = st.columns([3,1,3])
+with cent_co:
+    st.image("data/ALV_svart-hvitt.png", width=100)
+    hide_img_fs = """
+    <style>
+    button[title="View fullscreen"]{
+        visibility: hidden;}
+    </style>
+    """
+    st.markdown(hide_img_fs, unsafe_allow_html=True)
