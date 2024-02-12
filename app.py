@@ -69,9 +69,9 @@ if location_input:
             # If location is in Norway
             if location and location.raw["properties"]["countrycode"] == "NO":
                 #st.write(f"Latitude: {location.latitude}, Longitude: {location.longitude}")
-                location_data = {"location": location,
-                                "latitude": location.latitude,
-                                "longitude": location.longitude}
+                location_data = {"location":  location,
+                                 "latitude":  location.latitude,
+                                 "longitude": location.longitude}
                 df = pd.DataFrame.from_dict(location_data, orient="columns")
                 st.map(df)
                 break
