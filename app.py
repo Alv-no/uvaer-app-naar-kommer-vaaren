@@ -78,7 +78,7 @@ df_predictions = load_data()
 
 # Front Page Title
 st.title("⛅ Når kommer våren? ⛅")
-st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på forskjellige lokasjoner. "))
+st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på din lokasjon. "))
 st.divider()
 
 # Choose location in Norway
@@ -98,6 +98,9 @@ st.markdown("""
 
 # Get location input from user
 location_input = st.text_input("Skriv inn lokasjonen i **Norge** du ønsker å sjekke her (og trykk enter):")
+
+# To only search for locations in Norway (like Grønland)
+query = location_input + ", Norway"
 geolocator = Nominatim(user_agent="streamlit_app")
 if location_input:
     with st.spinner("Processing ..."):
@@ -105,7 +108,11 @@ if location_input:
             
             # Get location data from geopy API
             try:
-                location = geolocator.geocode(location_input, exactly_one=True, language="en", namedetails=True, addressdetails=True)
+                location = geolocator.geocode(query,
+                                              exactly_one=True, 
+                                              language="no", 
+                                              namedetails=True, 
+                                              addressdetails=True)
             except ValueError or GeocoderUnavailable or GeocoderTimedOut:
                 time.sleep(1)
                 continue
@@ -146,6 +153,7 @@ if location_input:
             
             # If location is not in Norway
             elif location and location.raw["address"]["country_code"] != "no":
+                print(f"{location.raw}")
                 st.write("Lokasjon ikke funnet i Norge. Prøv igjen.")
                 break
             
@@ -191,7 +199,7 @@ try:
         
         # Display date for spring arrival
         st.header(f"🌸 Vårens ankomst: {date_of_spring_start}")
-        st.write("Helt sikkerhet vil våren komme mellom {} og {}.".format(date_of_spring_start_lower_without_year, date_of_spring_start_upper_without_year))
+        st.write("Helt sikkert vil våren komme mellom {} og {}.".format(date_of_spring_start_lower_without_year, date_of_spring_start_upper_without_year))
 except NameError:
     st.write("Du har ikke skrevet inn noen lokasjon ovenfor!")
     pass
