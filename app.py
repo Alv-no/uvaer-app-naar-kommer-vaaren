@@ -18,8 +18,7 @@ st.set_page_config(page_title="Når kommer våren?",
                    menu_items={
                        "Get Help": "https://alv.no/",
                        "Report a bug": "mailto:hakon@alv.no",
-                       "About": ("This is a simple app to predict the arrival of spring in Norway. " 
-                                 "It is based on the work of the Norwegian Meteorological Institute.")
+                       "About": ("This is a simple app to predict the arrival of spring in Norway. ")
                    }
 )
 
@@ -32,10 +31,7 @@ df_predictions = load_data()
 
 # Front Page Title
 st.title("⛅ Når kommer våren? ⛅")
-st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på forskjellige lokasjoner. " 
-         "Vi tar ikke noe ansvar for at prediksjonene er riktige, men håper at det kan skape en dialog rundt "
-         "utfordringer med analyse av værdata. Vi har basert oss på data fra Meteorologisk institutt. Hvis du "
-         "er uenig i prediksjonen for ditt område, send gjerne inn en klage til hei@alv.no."))
+st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på forskjellige lokasjoner. "))
 st.divider()
 
 # Choose location in Norway
@@ -46,43 +42,49 @@ st.markdown("""
     input[type=text] {
         color: #061838;
     }
+    input[type=text]:focus {
+        caret-color: #061838;
+        background-color: lightyellow;
+    }
     </style>
     """, unsafe_allow_html=True
 )
 
 # Get location input from user
-location_input = st.text_input("Skriv inn lokasjonen i **Norge** du ønsker å sjekke her:")
+location_input = st.text_input("Skriv inn lokasjonen i **Norge** du ønsker å sjekke her (og trykk enter):")
 if location_input:
-    while True:
-        
-        # Get location data from geopy API
-        try:
-            location = geolocator.geocode(location_input)
-        except ValueError or GeocoderUnavailable or GeocoderTimedOut:
-            continue
-        
-        # Sleep for 1 second to avoid geocoding API rate limits
-        time.sleep(1)
-        
-        # If location is in Norway
-        if location and location.raw["properties"]["countrycode"] == "NO":
-            st.write(f"Latitude: {location.latitude}, Longitude: {location.longitude}")
-            location_data = {"location": location,
-                             "latitude": location.latitude,
-                             "longitude": location.longitude}
-            df = pd.DataFrame.from_dict(location_data, orient="columns")
-            st.map(df)
-            break
-        
-        # If location is not in Norway
-        elif location and location.raw["properties"]["countrycode"] != "NO":
-            st.write("Lokasjon ikke funnet i Norge. Prøv igjen.")
-            break
-        
-        # If location is not found
-        else:
-            st.write("Lokasjon ikke funnet.")
-            break
+    with st.spinner("Processing ..."):
+        while True:
+            
+            # Get location data from geopy API
+            try:
+                location = geolocator.geocode(location_input)
+            except ValueError or GeocoderUnavailable or GeocoderTimedOut:
+                time.sleep(1)
+                continue
+            
+            # Sleep for 1 second to avoid geocoding API rate limits
+            time.sleep(1)
+            
+            # If location is in Norway
+            if location and location.raw["properties"]["countrycode"] == "NO":
+                #st.write(f"Latitude: {location.latitude}, Longitude: {location.longitude}")
+                location_data = {"location": location,
+                                "latitude": location.latitude,
+                                "longitude": location.longitude}
+                df = pd.DataFrame.from_dict(location_data, orient="columns")
+                st.map(df)
+                break
+            
+            # If location is not in Norway
+            elif location and location.raw["properties"]["countrycode"] != "NO":
+                st.write("Lokasjon ikke funnet i Norge. Prøv igjen.")
+                break
+            
+            # If location is not found
+            else:
+                st.write("Lokasjon ikke funnet.")
+                break
 
 # Get closest location ID that compares the current_loction to the dataframe
 def get_closest_location_id(current_location, df):
@@ -132,7 +134,12 @@ try:
         # Replace date_of_spring with Norwegian month names
         for english, norwegian in english_to_norwegian_months_mapping.items():
             date_of_spring = date_of_spring.replace(english, norwegian)
-            
+        
+        # Convert day of month from (01, 02, 03, ..) to (1, 2, 3, ..)
+        day_of_month = str(int(date_of_spring.split(".")[0]))
+        added_date_text = date_of_spring.split(".")[1]
+        date_of_spring = day_of_month + "." + added_date_text
+        
         # Display date for spring arrival
         st.header(f"🌸 Vårens ankomst: {date_of_spring}")
 except NameError:
