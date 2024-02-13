@@ -80,11 +80,11 @@ df_predictions = load_data()
 
 # Front Page Title
 st.title("⛅ Når kommer våren? ⛅")
-st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på din lokasjon. "))
+st.write(("Velkommen til vår lille app for å forutsi når våren kommer til Norge på ditt sted. "))
 st.divider()
 
 # Choose location in Norway
-st.header("🌍 Velg lokasjon i Norge")
+st.header("🌍 Velg sted i Norge")
 st.markdown("""
     <style>
     input[type=text] {
@@ -99,7 +99,7 @@ st.markdown("""
 )
 
 # Get location input from user
-location_input = st.text_input("Skriv inn lokasjonen i **Norge** du ønsker å sjekke her (og trykk enter):")
+location_input = st.text_input("Skriv inn stedet i **Norge** du ønsker å sjekke her (og trykk enter):")
 
 # To only search for locations in Norway (like Grønland)
 query = location_input + ", Norway"
@@ -156,12 +156,12 @@ if location_input:
             # If location is not in Norway
             elif location and location.raw["address"]["country_code"] != "no":
                 print(f"{location.raw}")
-                st.write("Lokasjon ikke funnet i Norge. Prøv igjen.")
+                st.write("Stedet ble ikke funnet i Norge. Prøv igjen.")
                 break
             
             # If location is not found
             else:
-                st.write("Lokasjon ikke funnet.")
+                st.write("Stedet ble ikke funnet.")
                 break
 
 # Display predictions for the closest location
@@ -201,7 +201,7 @@ try:
         
         # Display date for spring arrival
         st.header(f"🌸 Vårens ankomst: {date_of_spring_start}")
-        st.write("Helt sikkert vil våren komme mellom {} og {}.".format(date_of_spring_start_lower_without_year, date_of_spring_start_upper_without_year))
+        st.write("Er du uheldig, trenger du ikke vente til lenger enn {}.".format(date_of_spring_start_upper_without_year))
 except NameError:
     st.write("Du har ikke skrevet inn noen lokasjon ovenfor!")
     pass
